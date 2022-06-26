@@ -5,11 +5,11 @@ import com.elonsoft.domain.formula.Numbers;
 /**
  * 값을 처리하는 후위 표현식 계산 인터페이스 구현체
  */
-public class VariableProcess implements PostfixProcess {
+public class VariableProcessor implements PostfixProcessor {
 
-    private String key;
+    private String key;         // 치환된 숫자의 key
 
-    public VariableProcess(char key) {
+    public VariableProcessor(char key) {
         this.key = String.valueOf(key);
     }
 

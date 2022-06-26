@@ -1,7 +1,5 @@
 package com.elonsoft;
 
-import com.elonsoft.domain.formula.Formula;
-import com.elonsoft.domain.formula.FormulaParser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

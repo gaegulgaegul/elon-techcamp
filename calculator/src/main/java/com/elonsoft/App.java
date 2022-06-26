@@ -8,6 +8,6 @@ import com.elonsoft.controller.Calculator;
 public class App {
     public static void main(String[] args) {
         Calculator calculator = new Calculator();
-        calculator.calculation();
+        calculator.calculate();
     }
 }
