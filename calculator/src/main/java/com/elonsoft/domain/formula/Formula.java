@@ -1,8 +1,8 @@
 package com.elonsoft.domain.formula;
 
 import com.elonsoft.constants.Operator;
-import com.elonsoft.domain.postfix.PostfixProcess;
-import com.elonsoft.domain.postfix.VariableProcess;
+import com.elonsoft.domain.postfix.PostfixProcessor;
+import com.elonsoft.domain.postfix.VariableProcessor;
 
 import java.util.Stack;
 
@@ -11,10 +11,10 @@ import java.util.Stack;
  *  - 후위 표현식 계산
  */
 public class Formula {
-    private final String postfixExpression;
-    private final Numbers numbers;
+    private final String postfixExpression;         // 후위 표현 계산식
+    private final Numbers numbers;                  // 치환된 숫자 정보 context
 
-    private Stack<PostfixProcess> stack;
+    private Stack<PostfixProcessor> stack;
 
     public Formula(String postfixExpression, Numbers numbers) {
         this.postfixExpression = postfixExpression;
@@ -28,7 +28,7 @@ public class Formula {
      */
     public double calculate() {
         try {
-            return formatting(this.restore().interpret(this.numbers));
+            return formatting(restore().interpret(this.numbers));
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("[ ERROR ] 계산식을 확인해주세요.");
         }
@@ -47,15 +47,24 @@ public class Formula {
      * 후위 표현식을 계산 처리 클래스, 값 처리 클래스로 변환해준다.
      * @return
      */
-    private PostfixProcess restore() {
+    private PostfixProcessor restore() {
         for (char character : this.postfixExpression.toCharArray()) {
-            Operator operator = Operator.symbolFor(character);
-            if (operator != null) {
-                this.stack.push(operator.process(this.stack));
-                continue;
-            }
-            this.stack.push(new VariableProcess(character));
+            setProcessor(character);
         }
         return this.stack.pop();
+    }
+
+    /**
+     * 후위 표현계산 객체 추가
+     * @param character
+     */
+    private void setProcessor(char character) {
+        Operator operator = Operator.symbolOf(character);
+
+        if (operator != null) {
+            this.stack.push(operator.process(this.stack));
+            return;
+        }
+        this.stack.push(new VariableProcessor(character));
     }
 }
